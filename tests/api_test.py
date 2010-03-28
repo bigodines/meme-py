@@ -39,3 +39,6 @@ class MemePostsApiTest(unittest.TestCase):
 
         assert Meme.Posts.search('a query') == ['search_result1']
         assert Meme.Posts.search('a query', count=40) == ['search_result2']
+
+if __name__ == "__main__":
+    unittest.main()

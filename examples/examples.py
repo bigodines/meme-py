@@ -17,8 +17,8 @@ for post in posts:
     print 'Caption: %s' % post.caption
     print '----------------------------------------------'
 
-print '========== Get guilherme_chapiewski Meme =========='
-meme = Meme.get(name='guilherme_chapiewski')
+print '========== Get gchapiewski Meme =========='
+meme = Meme.get(name='gchapiewski')
 print meme
 print meme.title
 print meme.description 
@@ -35,3 +35,6 @@ print meme.followers()
 
 print '========== 50 Memes following guilherme_chapiewski Meme =========='
 print meme.followers(count=50)
+
+print '========== Getting 5 followers from gc. From 5th to 10th randomly ordered ============='
+print meme.followers(offset=5,count=5)

@@ -176,3 +176,6 @@ class MemeTest(unittest.TestCase):
         meme.name = 'some_name'
         
         assert meme.followers() == ['meme_followers']
+
+if __name__ == "__main__":
+    unittest.main()
