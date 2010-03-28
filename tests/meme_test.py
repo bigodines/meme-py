@@ -37,7 +37,7 @@ class MemeRepositoryTest(unittest.TestCase):
         query_result.count = 1
         when(yql_mock).execute(yql_query).thenReturn(query_result)
         
-        yql_query_following = 'SELECT * FROM meme.following(2) WHERE owner_guid = "123"'
+        yql_query_following = 'SELECT * FROM meme.following(0,2) WHERE owner_guid = "123"'
         query_following_result = Mock()
         query_following_result.rows = []
         query_following_result.rows.append({'guid':'456', 'name':'some_other_name', 
@@ -74,7 +74,7 @@ class MemeRepositoryTest(unittest.TestCase):
         query_result.count = 1
         when(yql_mock).execute(yql_query).thenReturn(query_result)
 
-        yql_query_following = 'SELECT * FROM meme.followers(2) WHERE owner_guid = "123"'
+        yql_query_following = 'SELECT * FROM meme.followers(0,2) WHERE owner_guid = "123"'
         query_following_result = Mock()
         query_following_result.rows = []
         query_following_result.rows.append({'guid':'456', 'name':'some_other_name', 
@@ -93,7 +93,7 @@ class MemeRepositoryTest(unittest.TestCase):
         repository = MemeRepository()
         repository.yql = yql_mock
 
-        memes = repository.followers('some_name', 2)
+        memes = repository.followers('some_name', count=2, offset=0)
         assert len(memes) == 2
         assert memes[0].guid == '456'
         assert memes[1].guid == '789'
@@ -115,7 +115,7 @@ class PostRepositoryTest(unittest.TestCase):
     
     def test_should_get_popular_posts_by_language(self):
         yql_mock = Mock()
-        yql_query = 'SELECT * FROM meme.popular(2) WHERE locale="pt"'
+        yql_query = 'SELECT * FROM meme.popular(0,2) WHERE locale="pt"'
         query_result = Mock()
         query_result.rows = []
         query_result.rows.append({'guid':'123', 'pubid':'123', 
@@ -139,7 +139,7 @@ class PostRepositoryTest(unittest.TestCase):
 
     def test_should_search_posts(self):
         yql_mock = Mock()
-        yql_query = 'SELECT * FROM meme.search(10) WHERE query="a sample query"'
+        yql_query = 'SELECT * FROM meme.search(0,10) WHERE query="a sample query"'
         query_result = Mock()
         query_result.rows = {'guid':'123', 'pubid':'123', 
                 'type':'post', 'caption':'blah', 'content':'blah', 
@@ -159,7 +159,7 @@ class MemeTest(unittest.TestCase):
     
     def test_should_get_memes_following_a_meme(self):
         meme_repository_mock = Mock()
-        when(meme_repository_mock).following('some_name', 10).thenReturn(['memes_following'])
+        when(meme_repository_mock).following('some_name', 10, 0).thenReturn(['memes_following'])
         
         meme = Meme()
         meme.meme_repository = meme_repository_mock
@@ -169,7 +169,7 @@ class MemeTest(unittest.TestCase):
         
     def test_should_get_meme_followers(self):
         meme_repository_mock = Mock()
-        when(meme_repository_mock).followers('some_name', 10).thenReturn(['meme_followers'])
+        when(meme_repository_mock).followers('some_name', 10, 0).thenReturn(['meme_followers'])
         
         meme = Meme()
         meme.meme_repository = meme_repository_mock
